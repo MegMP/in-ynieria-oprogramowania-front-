@@ -31,6 +31,12 @@ export const Nav = () => {
           <NavigationMenuLink asChild>
             <Link to="/topics">Topics</Link>
           </NavigationMenuLink>
+          <NavigationMenuLink asChild>
+            <Link to="/projects">Projects</Link>
+          </NavigationMenuLink>
+          <NavigationMenuLink asChild>
+            <Link to="/groups">Groups</Link>
+          </NavigationMenuLink>
         </NavigationMenuList>
       </NavigationMenu>
       <Button variant="ghost" onClick={logout} className="cursor-pointer">

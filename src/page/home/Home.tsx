@@ -1,23 +1,13 @@
-import { Navigate } from "react-router-dom";
+import { useUserData } from "./hooks/useUserData";
 
 export const Home = () => {
-  // const { data, isLoading, error } = useCandidates();
-  // if (isLoading) {
-  //   return <p>Loading...</p>;
-  // }
-  // if (error?.response?.status === 403) {
-  //   return <Navigate to="/login"></Navigate>;
-  // }
-  // if (error) {
-  //   console.log(error?.response);
-  //   return <p>Sorry, something went wrong</p>;
-  // }
-  // if(data?.length === 0) {
-  //   return <p>No more users to display</p>;
-  // }
+  const { data: user } = useUserData();
 
   return (
-    // <UserSwiper users={data ?? []} />
-    <></>
+    <div className="flex-1 min-h-[calc(100vh-4rem)] bg-gradient-to-br from-pink-50 to-gray-100 p-4 sm:p-8 flex items-center justify-center">
+      <h1 className="text-4xl font-bold text-gray-800 animate-in fade-in duration-700">
+        Welcome back {user?.login ?? ""}!
+      </h1>
+    </div>
   );
 };
