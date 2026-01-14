@@ -17,7 +17,9 @@ export const Topics = () => {
   const currentUserId = localStorage.getItem("userId");
 
   const handleDelete = (topicId: string) => {
+    if (window.confirm("Are you sure you want to delete this topic?")) {
       deleteTopicMutation.mutate(topicId);
+    }
   };
 
   if (isLoading) {
@@ -75,21 +77,19 @@ export const Topics = () => {
                       {topic.description}
                     </CardDescription>
                   </div>
-                  {topic.userId === currentUserId && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-red-400 hover:text-red-500 hover:bg-red-50 -mt-2 -mr-2"
-                      onClick={() => handleDelete(topic.id)}
-                      disabled={deleteTopicMutation.isPending}
-                    >
-                      {deleteTopicMutation.isPending ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Trash2 className="w-4 h-4" />
-                      )}
-                    </Button>
-                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-red-400 hover:text-red-500 hover:bg-red-50 -mt-2 -mr-2"
+                    onClick={() => handleDelete(topic.id)}
+                    disabled={deleteTopicMutation.isPending}
+                  >
+                    {deleteTopicMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="w-4 h-4" />
+                    )}
+                  </Button>
                 </div>
               </CardHeader>
             </Card>

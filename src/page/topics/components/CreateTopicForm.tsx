@@ -46,6 +46,9 @@ export const CreateTopicForm = () => {
           form.reset();
           setIsOpen(false);
         },
+        onError: (error) => {
+          console.error("Failed to create topic:", error);
+        },
       }
     );
   };
