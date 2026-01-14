@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useGroups } from "./hooks/useGroups";
 import { useDeleteGroup } from "./hooks/useDeleteGroup";
 import { CreateGroupForm } from "./components/CreateGroupForm";
@@ -68,7 +69,12 @@ export const Groups = () => {
             >
               <CardHeader>
                 <CardTitle className="text-lg text-gray-800">
-                  {group.name}
+                  <Link
+                    to={`/groups/${group.id}`}
+                    className="hover:underline hover:text-pink-600 block w-full"
+                  >
+                    {group.name}
+                  </Link>
                 </CardTitle>
               </CardHeader>
               <CardContent>{/* Minimal content as requested */}</CardContent>

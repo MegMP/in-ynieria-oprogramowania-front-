@@ -5,6 +5,7 @@ import { Profile } from "./page/home/Profile";
 import { Topics } from "./page/topics/Topics";
 import { Projects } from "./page/projects/Projects";
 import { Groups } from "./page/groups/Groups";
+import { GroupDetails } from "./page/groups/GroupDetails";
 import { Layout } from "./components/Layout";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="topics" element={<Topics />} />
         <Route path="projects" element={<Projects />} />
         <Route path="groups" element={<Groups />} />
+        <Route path="groups/:groupId" element={<GroupDetails />} />
       </Route>
     </Routes>
   );
