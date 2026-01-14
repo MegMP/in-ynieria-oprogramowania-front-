@@ -46,9 +46,7 @@ export const Login = () => {
 
   const onSubmit = async (data: FormData) => {
     loginMutation.mutate(data, {
-      onSuccess: (response: AuthResponse) => {
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("userId", response.userId);
+      onSuccess: () => {
         form.reset();
       },
       onError: (error: any) => {

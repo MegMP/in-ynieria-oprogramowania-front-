@@ -1,3 +1,4 @@
+import { Link, useNavigate } from "react-router-dom";
 import { useProjects } from "./hooks/useProjects";
 import { useTopics } from "../topics/hooks/useTopics";
 import {
@@ -13,8 +14,6 @@ import {
   AlertCircle,
   FolderGit2,
   Calendar,
-  CheckCircle2,
-  Circle,
   Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,6 +22,7 @@ import { CreateProjectForm } from "./components/CreateProjectForm";
 import { useDeleteProject } from "./hooks/useDeleteProject";
 
 export const Projects = () => {
+  const navigate = useNavigate();
   const {
     data: projects,
     isLoading: projectsLoading,
@@ -52,31 +52,31 @@ export const Projects = () => {
     });
   };
 
-    if (isLoading) {
-      return (
-        <div className="flex-1 min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-pink-50 to-gray-100">
-          <Loader2 className="w-10 h-10 animate-spin text-pink-400" />
-        </div>
-      );
-    }
+  if (isLoading) {
+    return (
+      <div className="flex-1 min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-pink-50 to-gray-100">
+        <Loader2 className="w-10 h-10 animate-spin text-pink-400" />
+      </div>
+    );
+  }
 
-    if (isError) {
-      return (
-        <div className="flex-1 min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-pink-50 to-gray-100">
-          <div className="flex flex-col items-center gap-2 text-red-500 bg-white p-6 rounded-xl shadow-lg">
-            <AlertCircle className="w-10 h-10" />
-            <p className="font-semibold">Failed to load projects</p>
-            <Button
-              variant="outline"
-              onClick={() => window.location.reload()}
-              className="cursor-pointer"
-            >
-              Retry
-            </Button>
-          </div>
+  if (isError) {
+    return (
+      <div className="flex-1 min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-pink-50 to-gray-100">
+        <div className="flex flex-col items-center gap-2 text-red-500 bg-white p-6 rounded-xl shadow-lg">
+          <AlertCircle className="w-10 h-10" />
+          <p className="font-semibold">Failed to load projects</p>
+          <Button
+            variant="outline"
+            onClick={() => window.location.reload()}
+            className="cursor-pointer"
+          >
+            Retry
+          </Button>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 min-h-[calc(100vh-4rem)] bg-gradient-to-br from-pink-50 to-gray-100 p-4 sm:p-8">
@@ -95,7 +95,8 @@ export const Projects = () => {
           {projects?.map((project) => (
             <Card
               key={project.id}
-              className="hover:shadow-lg transition-shadow bg-white border-pink-100"
+              className="hover:shadow-lg transition-shadow bg-white border-pink-100 cursor-pointer"
+              onClick={() => navigate(`/projects/${project.id}`)}
             >
               <CardHeader className="pb-3">
                 <div className="flex justify-between items-start gap-2">
@@ -121,21 +122,24 @@ export const Projects = () => {
                 </p>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                   <Calendar className="w-4 h-4" />
-                  <CardFooter className="flex justify-end pt-0">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-400 hover:text-red-500 hover:bg-red-50"
-                      onClick={() => handleDelete(project.id)}
-                      disabled={deleteProjectMutation.isPending}
-                    >
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Delete
-                    </Button>
-                  </CardFooter>
                   <span>Due: {formatDate(project.deadline)}</span>
                 </div>
               </CardContent>
+              <CardFooter className="flex justify-end pt-0 mt-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-red-400 hover:text-red-500 hover:bg-red-50"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(project.id);
+                  }}
+                  disabled={deleteProjectMutation.isPending}
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete
+                </Button>
+              </CardFooter>
             </Card>
           ))}
         </div>

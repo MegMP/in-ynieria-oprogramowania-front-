@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGroups } from "./hooks/useGroups";
 import { useDeleteGroup } from "./hooks/useDeleteGroup";
 import { CreateGroupForm } from "./components/CreateGroupForm";
@@ -13,6 +13,7 @@ import { Users2, Loader2, AlertCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Groups = () => {
+  const navigate = useNavigate();
   const { data: groups, isLoading, isError } = useGroups();
   const deleteGroupMutation = useDeleteGroup();
 
@@ -65,16 +66,12 @@ export const Groups = () => {
           {groups?.map((group) => (
             <Card
               key={group.id}
-              className="hover:shadow-md transition-shadow bg-white border-pink-100 flex flex-col justify-between"
+              className="hover:shadow-lg transition-shadow bg-white border-pink-100 flex flex-col justify-between cursor-pointer"
+              onClick={() => navigate(`/groups/${group.id}`)}
             >
               <CardHeader>
                 <CardTitle className="text-lg text-gray-800">
-                  <Link
-                    to={`/groups/${group.id}`}
-                    className="hover:underline hover:text-pink-600 block w-full"
-                  >
-                    {group.name}
-                  </Link>
+                  {group.name}
                 </CardTitle>
               </CardHeader>
               <CardContent>{/* Minimal content as requested */}</CardContent>
@@ -83,7 +80,10 @@ export const Groups = () => {
                   variant="ghost"
                   size="sm"
                   className="text-red-400 hover:text-red-500 hover:bg-red-50"
-                  onClick={() => handleDelete(group.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(group.id);
+                  }}
                   disabled={deleteGroupMutation.isPending}
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
