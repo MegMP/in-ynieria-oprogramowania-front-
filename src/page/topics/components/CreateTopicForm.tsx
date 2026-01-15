@@ -34,10 +34,6 @@ export const CreateTopicForm = () => {
 
   const onSubmit = (data: FormData) => {
     const userId = localStorage.getItem("userId");
-    if (!userId) {
-      console.error("User ID not found");
-      return;
-    }
 
     createTopicMutation.mutate(
       { ...data, userId },

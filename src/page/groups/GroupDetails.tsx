@@ -28,13 +28,13 @@ export const GroupDetails = () => {
   const { data: group, isLoading, isError } = useGroup(groupId);
   const addMemberMutation = useAddMember(groupId!);
   const removeMemberMutation = useRemoveMember(groupId!);
-  const [newUserId, setNewUserId] = useState("");
+  const [newLogin, setNewLogin] = useState("");
 
   const handleAddMember = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newUserId) {
-      addMemberMutation.mutate(newUserId, {
-        onSuccess: () => setNewUserId(""),
+    if (newLogin) {
+      addMemberMutation.mutate(newLogin, {
+        onSuccess: () => setNewLogin(""),
       });
     }
   };
@@ -92,20 +92,20 @@ export const GroupDetails = () => {
           <CardHeader>
             <CardTitle>Add Member</CardTitle>
             <CardDescription>
-              Enter User ID to add to this group
+              Enter username to add to this group
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleAddMember} className="flex gap-2">
               <Input
-                placeholder="User ID"
-                value={newUserId}
-                onChange={(e) => setNewUserId(e.target.value)}
+                placeholder="Username"
+                value={newLogin}
+                onChange={(e) => setNewLogin(e.target.value)}
                 className="max-w-xs"
               />
               <Button
                 type="submit"
-                disabled={addMemberMutation.isPending || !newUserId}
+                disabled={addMemberMutation.isPending || !newLogin}
               >
                 {addMemberMutation.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

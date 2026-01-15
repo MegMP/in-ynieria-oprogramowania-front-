@@ -1,24 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import type { Grade } from "../types/Grade";
 
-export const useProjectPackage = (projectId: string | undefined) => {
+export const useProjectGrade = (projectId: string | undefined) => {
   const token = localStorage.getItem("token");
-  return useQuery<Blob>({
-    queryKey: ["projectPackage", projectId],
+  return useQuery<Grade>({
+    queryKey: ["projectGrade", projectId],
     queryFn: async () => {
       if (!projectId) throw new Error("Project ID is required");
       const { data } = await axios.get(
-        `http://localhost:8080/documents/project/${projectId}`,
+        `http://localhost:8080/grades/projects/${projectId}`,
         {
           headers: {
             Authorization: token ? `Bearer ${token}` : undefined,
           },
-          responseType: "blob",
         }
       );
       return data;
     },
     enabled: !!projectId,
-    retry: false, // Don't retry if 404 (no package)
+    retry: false,
   });
 };

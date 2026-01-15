@@ -5,11 +5,11 @@ export const useAddMember = (groupId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (userId: string) => {
+    mutationFn: (login: string) => {
       const token = localStorage.getItem("token");
       return axios.post(
         `http://localhost:8080/groups/${groupId}/members`,
-        { userId },
+        { login },
         {
           headers: {
             Authorization: token === null ? null : `Bearer ${token}`,
