@@ -72,7 +72,7 @@ export const Profile = () => {
           <CardTitle className="text-2xl font-bold text-gray-800">
             {data?.login}
           </CardTitle>
-          <CardDescription>{data?.email}</CardDescription>
+          <CardDescription>{data?.mail}</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-8 px-6 sm:px-12 py-8">

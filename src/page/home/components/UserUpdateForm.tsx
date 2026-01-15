@@ -37,7 +37,7 @@ export const UserUpdateForm = () => {
     if (data) {
       form.reset({
         login: data.login,
-        email: data.email,
+        email: data.mail,
       });
     }
   }, [data, form]);

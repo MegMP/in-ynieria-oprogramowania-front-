@@ -3,7 +3,7 @@ import axios from "axios";
 import type { Grade } from "../types/Grade";
 
 type GradeRequest = {
-  value: string;
+  value: number;
   feedback: string;
 };
 
@@ -13,11 +13,12 @@ export const useGradeProject = (projectId: string | undefined) => {
 
   return useMutation({
     mutationFn: async (data: GradeRequest) => {
-      if (!projectId) throw new Error("Project ID is required");
-
       const response = await axios.post<Grade>(
         `http://localhost:8080/grades/projects/${projectId}`,
-        data,
+        {
+          grade: data.value.toString(),
+          comment: data.feedback,
+        },
         {
           headers: {
             Authorization: token ? `Bearer ${token}` : undefined,

@@ -4,6 +4,7 @@ import { useProject } from "./hooks/useProject";
 import { useProjectPackage } from "./hooks/useProjectPackage";
 import { useProjectGrade } from "./hooks/useProjectGrade";
 import { useGradeProject } from "./hooks/useGradeProject";
+import { useDeleteGrade } from "./hooks/useDeleteGrade";
 import { useUploadProjectPackage } from "./hooks/useUploadProjectPackage";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,7 @@ import {
   FileText,
   Upload,
   FolderGit2,
+  Trash2,
 } from "lucide-react";
 import { AlertCircle } from "lucide-react";
 
@@ -37,6 +39,7 @@ export const ProjectDetails = () => {
     useProjectPackage(projectId);
   const { data: grade } = useProjectGrade(projectId);
   const gradeMutation = useGradeProject(projectId);
+  const deleteGradeMutation = useDeleteGrade(projectId);
   const [gradeValue, setGradeValue] = useState<number | "">("");
   const [feedback, setFeedback] = useState("");
 
@@ -45,7 +48,7 @@ export const ProjectDetails = () => {
   const handleGradeSubmit = () => {
     if (gradeValue !== "") {
       gradeMutation.mutate(
-        { value: String(gradeValue), feedback },
+        { value: Number(gradeValue), feedback },
         {
           onSuccess: () => {
             setGradeValue("");
@@ -53,6 +56,12 @@ export const ProjectDetails = () => {
           },
         }
       );
+    }
+  };
+
+  const handleDeleteGrade = (gradeId: string) => {
+    if (confirm("Are you sure you want to delete this grade?")) {
+      deleteGradeMutation.mutate(gradeId);
     }
   };
 
@@ -67,7 +76,6 @@ export const ProjectDetails = () => {
       uploadMutation.mutate(selectedFile, {
         onSuccess: () => {
           setSelectedFile(null);
-          // To clear visual input, we might need a ref, but let's keep it simple.
           document.getElementById("document")?.setAttribute("value", "");
         },
       });
@@ -156,16 +164,31 @@ export const ProjectDetails = () => {
                   {project.status ? "Completed" : "In Progress"}
                 </Badge>
               </div>
-              {grade ? (
+              {grade && (grade as any).id && grade.grade ? (
                 <div className="pt-4 border-t mt-4">
-                  <h3 className="font-semibold mb-1">Grade</h3>
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className="font-semibold">Grade</h3>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-red-400 hover:text-red-500 hover:bg-red-50 h-8 w-8"
+                      onClick={() => handleDeleteGrade(grade.id)}
+                      disabled={deleteGradeMutation.isPending}
+                    >
+                      {deleteGradeMutation.isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-primary">
-                      {grade.value}
+                    <span className="text-2xl font-bold text-pink-600">
+                      {grade.grade}
                     </span>
-                    {grade.feedback && (
+                    {grade.comment && (
                       <p className="text-sm text-muted-foreground italic">
-                        "{grade.feedback}"
+                        "{grade.comment}"
                       </p>
                     )}
                   </div>
@@ -184,9 +207,14 @@ export const ProjectDetails = () => {
                     <Input
                       type="number"
                       value={gradeValue}
-                      onChange={(e) => setGradeValue(Number(e.target.value))}
+                      onChange={(e) =>
+                        setGradeValue(
+                          e.target.value === "" ? "" : Number(e.target.value)
+                        )
+                      }
                       placeholder="Enter grade (e.g. 1-100)"
                       min={0}
+                      step={0.5}
                     />
                   </div>
                   <div className="space-y-2">
@@ -210,7 +238,7 @@ export const ProjectDetails = () => {
                   </Button>
                   {gradeMutation.isError && (
                     <p className="text-sm text-red-500">
-                      {(gradeMutation.error as any)?.response?.data?.message || "Failed to submit grade. Please check your inputs."}
+                      Failed to submit grade.
                     </p>
                   )}
                 </div>

@@ -134,18 +134,18 @@ export const GroupDetails = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {group.users.map((user) => (
-                    <TableRow key={user.id}>
+                  {group.users.map((member) => (
+                    <TableRow key={member.user.id}>
                       <TableCell className="font-medium">
-                        {user.login}
+                        {member.user.login}
                       </TableCell>
-                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{member.user.mail}</TableCell>
                       <TableCell className="text-right">
                         <Button
                           variant="ghost"
                           size="icon"
                           className="text-red-400 hover:text-red-600 hover:bg-red-50"
-                          onClick={() => handleRemoveMember(user.id)}
+                          onClick={() => handleRemoveMember(member.user.id)}
                           disabled={removeMemberMutation.isPending}
                         >
                           <Trash2 className="w-4 h-4" />
