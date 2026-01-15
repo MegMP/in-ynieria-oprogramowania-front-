@@ -3,7 +3,7 @@ import axios from "axios";
 import type { Grade } from "../types/Grade";
 
 type GradeRequest = {
-  value: number;
+  value: string;
   feedback: string;
 };
 

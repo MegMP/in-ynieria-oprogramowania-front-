@@ -45,7 +45,7 @@ export const ProjectDetails = () => {
   const handleGradeSubmit = () => {
     if (gradeValue !== "") {
       gradeMutation.mutate(
-        { value: Number(gradeValue), feedback },
+        { value: String(gradeValue), feedback },
         {
           onSuccess: () => {
             setGradeValue("");
@@ -210,7 +210,7 @@ export const ProjectDetails = () => {
                   </Button>
                   {gradeMutation.isError && (
                     <p className="text-sm text-red-500">
-                      Failed to submit grade.
+                      {(gradeMutation.error as any)?.response?.data?.message || "Failed to submit grade. Please check your inputs."}
                     </p>
                   )}
                 </div>
